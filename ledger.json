@@ -120,5 +120,15 @@
       "status": "test"
     },
     "timestamp": 1775353176709
+  },
+  {
+    "hash": "041d26063712f20fa30edbf645245963dfb0ffb2fefeeb8626b4237af984cfa2",
+    "intent": "Clone repo",
+    "operators": [],
+    "artifacts": {
+      "status": "no_op",
+      "message": "No matching operator for intent"
+    },
+    "timestamp": 1775353284461
   }
 ]
