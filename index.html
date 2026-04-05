@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hilbert-Space AI-Native IDE</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --surface: #161b22;
+      --border: #30363d;
+      --accent: #58a6ff;
+      --accent2: #3fb950;
+      --accent3: #d2a8ff;
+      --text: #c9d1d9;
+      --muted: #8b949e;
+      --code-bg: #1f2428;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, monospace;
+      line-height: 1.7;
+    }
+    a { color: var(--accent); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    /* NAV */
+    nav {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0.75rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-size: 1.1rem; font-weight: 700; color: var(--accent); letter-spacing: 0.03em; }
+    .nav-links { display: flex; gap: 1.5rem; font-size: 0.9rem; color: var(--muted); }
+    .nav-links a { color: var(--muted); }
+    .nav-links a:hover { color: var(--text); }
+
+    /* HERO */
+    .hero {
+      text-align: center;
+      padding: 5rem 2rem 3rem;
+      background: linear-gradient(180deg, #0d1117 0%, #161b22 100%);
+      border-bottom: 1px solid var(--border);
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(88,166,255,0.1);
+      border: 1px solid rgba(88,166,255,0.3);
+      color: var(--accent);
+      font-size: 0.75rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 999px;
+      margin-bottom: 1.5rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #58a6ff 0%, #d2a8ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      font-size: 1.15rem;
+      color: var(--muted);
+      max-width: 640px;
+      margin: 0 auto 2rem;
+    }
+    .hero-eq {
+      font-family: 'Courier New', monospace;
+      font-size: 1rem;
+      color: var(--accent2);
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      display: inline-block;
+      padding: 0.6rem 1.5rem;
+      border-radius: 8px;
+      margin-bottom: 2.5rem;
+      letter-spacing: 0.05em;
+    }
+    .hero-buttons { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.6rem 1.4rem;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .btn:hover { opacity: 0.85; text-decoration: none; }
+    .btn-primary { background: var(--accent); color: #0d1117; }
+    .btn-secondary { background: var(--surface); color: var(--text); border: 1px solid var(--border); }
+
+    /* MAIN */
+    main { max-width: 1100px; margin: 0 auto; padding: 3rem 2rem; }
+
+    /* SECTION */
+    section { margin-bottom: 4rem; }
+    section h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    section p { color: var(--muted); margin-bottom: 1rem; }
+
+    /* PIPELINE */
+    .pipeline {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0;
+      margin: 2rem 0;
+    }
+    .pipe-node {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem 1.4rem;
+      text-align: center;
+      min-width: 110px;
+    }
+    .pipe-node .label { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.3rem; }
+    .pipe-node .sym { font-size: 1.6rem; font-weight: 800; }
+    .pipe-node.I .sym { color: var(--accent); }
+    .pipe-node.G .sym { color: var(--accent2); }
+    .pipe-node.A .sym { color: var(--accent3); }
+    .pipe-node.H .sym { color: #f78166; }
+    .pipe-arrow {
+      font-size: 1.2rem;
+      color: var(--muted);
+      padding: 0 0.5rem;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .pipe-arrow span { font-size: 0.65rem; color: var(--accent); letter-spacing: 0.05em; }
+
+    /* CARDS */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1.25rem 1.5rem;
+      transition: border-color 0.2s;
+    }
+    .card:hover { border-color: var(--accent); }
+    .card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--text); }
+    .card p { font-size: 0.875rem; color: var(--muted); margin: 0; }
+    .card .tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      padding: 0.15rem 0.5rem;
+      border-radius: 999px;
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+    .tag-blue { background: rgba(88,166,255,0.15); color: var(--accent); }
+    .tag-green { background: rgba(63,185,80,0.15); color: var(--accent2); }
+    .tag-purple { background: rgba(210,168,255,0.15); color: var(--accent3); }
+    .tag-red { background: rgba(247,129,102,0.15); color: #f78166; }
+
+    /* TABLE */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    th {
+      background: var(--surface);
+      color: var(--muted);
+      font-weight: 600;
+      text-align: left;
+      padding: 0.6rem 1rem;
+      border: 1px solid var(--border);
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    td {
+      padding: 0.65rem 1rem;
+      border: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: top;
+    }
+    tr:hover td { background: rgba(255,255,255,0.02); }
+    code {
+      font-family: 'Courier New', monospace;
+      background: var(--code-bg);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      font-size: 0.85em;
+      color: var(--accent3);
+    }
+
+    /* CODE BLOCK */
+    .code-block {
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.25rem 1.5rem;
+      font-family: 'Courier New', monospace;
+      font-size: 0.85rem;
+      color: var(--accent2);
+      overflow-x: auto;
+      margin-bottom: 1rem;
+      line-height: 1.6;
+    }
+    .code-block .comment { color: var(--muted); }
+    .code-block .keyword { color: var(--accent); }
+    .code-block .string { color: var(--accent3); }
+
+    /* TESTS */
+    .test-list { display: flex; flex-direction: column; gap: 0.4rem; }
+    .test-item {
+      display: flex; align-items: center; gap: 0.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 0.5rem 1rem;
+      font-size: 0.875rem;
+    }
+    .test-item .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent2);
+      flex-shrink: 0;
+    }
+    .test-item .section-label { color: var(--muted); font-size: 0.75rem; min-width: 80px; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">&#x210B; Hilbert-IDE</div>
+  <div class="nav-links">
+    <a href="#architecture">Architecture</a>
+    <a href="#operators">Operators</a>
+    <a href="#usage">Usage</a>
+    <a href="#tests">Tests</a>
+    <a href="https://github.com/elevate-foundry/hilbert-ide" target="_blank">GitHub</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-badge">Hilbert-Space Formulation &bull; One-Shot Runtime</div>
+  <h1>AI-Native IDE</h1>
+  <p>A minimal runtime realizing a deterministic execution system formalized over a separable Hilbert space. Every state is composable, replayable, and auditable.</p>
+  <div class="hero-eq">&#x210B; = &#x210B;<sub>I</sub> &oplus; &#x210B;<sub>G</sub> &oplus; &#x210B;<sub>A</sub> &oplus; &#x210B;<sub>H</sub></div>
+  <div class="hero-buttons">
+    <a class="btn btn-primary" href="https://github.com/elevate-foundry/hilbert-ide" target="_blank">
+      &#x2B07; View on GitHub
+    </a>
+    <a class="btn btn-secondary" href="#usage">
+      &#x25B6; Quick Start
+    </a>
+  </div>
+</div>
+
+<main>
+
+  <!-- PIPELINE -->
+  <section id="architecture">
+    <h2>System Pipeline</h2>
+    <p>System evolution is a single deterministic step: intent flows through planning, execution, and commit into an immutable ledger — and is fully replayable from any point.</p>
+    <div class="pipeline">
+      <div class="pipe-node I"><div class="label">Intent</div><div class="sym">I</div></div>
+      <div class="pipe-arrow">&#x2192;<span>P</span></div>
+      <div class="pipe-node G"><div class="label">Graph</div><div class="sym">G</div></div>
+      <div class="pipe-arrow">&#x2192;<span>E</span></div>
+      <div class="pipe-node A"><div class="label">Artifact</div><div class="sym">A</div></div>
+      <div class="pipe-arrow">&#x2192;<span>C</span></div>
+      <div class="pipe-node H"><div class="label">History</div><div class="sym">H</div></div>
+      <div class="pipe-arrow">&#x2192;<span>R</span></div>
+      <div class="pipe-node I" style="border-style:dashed"><div class="label">Replay</div><div class="sym">(I,G,A)</div></div>
+    </div>
+    <p>The state tuple <code>s = (I, G, A, H)</code> evolves as:</p>
+    <div class="code-block">s<sub>t+1</sub> = (I, P(I), E(P(I)), C(I, P(I), E(P(I))))</div>
+  </section>
+
+  <!-- OPERATORS -->
+  <section id="operators">
+    <h2>Operator Reference</h2>
+    <table>
+      <thead>
+        <tr><th>Operator</th><th>Signature</th><th>Description</th><th>Constraint</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>P</code> Planning</td><td><code>H_I &rarr; H_G</code></td><td>Maps intent embedding to execution graph</td><td>Single-valued, deterministic</td></tr>
+        <tr><td><code>E</code> Execution</td><td><code>H_G &rarr; H_A</code></td><td>Composes operators in DAG order, produces artifacts</td><td>Associative composition, typed I/O</td></tr>
+        <tr><td><code>C</code> Commit</td><td><code>H_I &oplus; H_G &oplus; H_A &rarr; H_H</code></td><td>Projects state into append-only ledger with content hash</td><td>Immutable, append-only</td></tr>
+        <tr><td><code>R</code> Replay</td><td><code>H_H &rarr; H</code></td><td>Reconstructs any committed state from its hash</td><td><code>R(C(s)) = s</code> exactly</td></tr>
+        <tr><td><code>S</code> Compress</td><td><code>H_I &rarr; H_G</code></td><td>Semantic compression of intent to graph</td><td><code>E(S(I)) &asymp; E(P(I))</code></td></tr>
+        <tr><td><code>&tau;</code> Trace</td><td><code>H &rarr; R<sup>k</sup></code></td><td>Audit trace functional — maps state to explanation</td><td>Reconstructible from H</td></tr>
+      </tbody>
+    </table>
+
+    <h2 style="margin-top:2rem">State Space Components</h2>
+    <div class="card-grid">
+      <div class="card">
+        <div class="tag tag-blue">H_I</div>
+        <h3>Intent Space</h3>
+        <p>Holds the raw intent string and its embedding vector. All planning begins here.</p>
+      </div>
+      <div class="card">
+        <div class="tag tag-green">H_G</div>
+        <h3>Execution Graph Space</h3>
+        <p>A directed acyclic composition of typed tool operators with explicit data dependencies.</p>
+      </div>
+      <div class="card">
+        <div class="tag tag-purple">H_A</div>
+        <h3>Artifact Space</h3>
+        <p>The output of execution — a typed dictionary of produced artifacts keyed by name.</p>
+      </div>
+      <div class="card">
+        <div class="tag tag-red">H_H</div>
+        <h3>History (Ledger) Space</h3>
+        <p>An append-only, content-addressed ledger of all committed states. Supports full replay.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- USAGE -->
+  <section id="usage">
+    <h2>Quick Start</h2>
+    <p>Clone the repository and run the demo pipeline in seconds:</p>
+    <div class="code-block">
+<span class="comment"># Clone</span>
+git clone https://github.com/elevate-foundry/hilbert-ide.git
+cd hilbert-ide
+
+<span class="comment"># Run the full demo pipeline (CLI)</span>
+python3 cli.py demo
+
+<span class="comment"># Execute a single step</span>
+python3 cli.py step <span class="string">"write a file"</span> --context <span class="string">'{"filename":"out.txt","content":"hello"}'</span>
+
+<span class="comment"># Replay any committed state by its SHA-256 hash</span>
+python3 cli.py replay &lt;sha256-hash&gt;
+
+<span class="comment"># View the full append-only ledger</span>
+python3 cli.py history
+
+<span class="comment"># Start the REST API server</span>
+uvicorn api:app --host 0.0.0.0 --port 8765
+    </div>
+
+    <h2 style="margin-top:2rem">REST API Endpoints</h2>
+    <table>
+      <thead><tr><th>Method</th><th>Endpoint</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td><code>POST</code></td><td><code>/step</code></td><td>Execute one system evolution step</td></tr>
+        <tr><td><code>GET</code></td><td><code>/replay/{hash}</code></td><td>Replay a committed state by SHA-256 hash</td></tr>
+        <tr><td><code>GET</code></td><td><code>/trace</code></td><td>Get audit trace for current state</td></tr>
+        <tr><td><code>GET</code></td><td><code>/history</code></td><td>Return the full append-only ledger</td></tr>
+        <tr><td><code>GET</code></td><td><code>/tools</code></td><td>List all registered primitive operators</td></tr>
+        <tr><td><code>GET</code></td><td><code>/state</code></td><td>Current system state summary</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- TESTS -->
+  <section id="tests">
+    <h2>Test Suite — 23/23 Passing</h2>
+    <p>All constraints from the specification are verified on every run via <code>python3 test_runtime.py</code>.</p>
+    <div class="test-list">
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 1</span> SystemState is a tuple (I, G, A, H)</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 1</span> State has a content-addressable SHA-256 hash</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 2</span> Determinism: identical inputs yield identical outputs</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 2</span> Planning operator produces an execution graph</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 2</span> Execution operator produces artifacts</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 3</span> Tools have typed names</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 3</span> Tools are callable</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 4</span> Graph is serializable</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 4</span> Graph has operator list</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 4</span> Graph has dependency map</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 5</span> History is append-only (grows with each step)</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 5</span> Ledger records are content-addressed by hash</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 5</span> R(C(s)) = s: Intent equality</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 5</span> R(C(s)) = s: Graph equality</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 5</span> R(C(s)) = s: Artifact equality</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 5</span> Exact equality under replay (all components)</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 7</span> Trace functional returns intent</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 7</span> Trace functional returns operations</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 7</span> Trace functional returns artifacts_produced</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 7</span> Trace functional returns state_hash</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 8</span> E(S(I)) ≈ E(P(I)): same operators</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 10</span> No untyped operations</div>
+      <div class="test-item"><div class="dot"></div><span class="section-label">Section 10</span> Non-replayable transitions are impossible</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Built with the Hilbert-Space Formulation &bull;
+  <a href="https://github.com/elevate-foundry/hilbert-ide" target="_blank">elevate-foundry/hilbert-ide</a>
+</footer>
+
+</body>
+</html>
