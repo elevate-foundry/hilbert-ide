@@ -193,5 +193,18 @@
       "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/openclaw.git\" \"/tmp/hilbert-clone-1775353566231\" 2>&1"
     },
     "timestamp": 1775353566243
+  },
+  {
+    "hash": "0f9b6e2d65a07b907c9f0ec9276296053d785b80156bee19def7567930205975",
+    "intent": "Clone ai-native-ide",
+    "operators": [
+      "clone_repo"
+    ],
+    "artifacts": {
+      "operator": "clone_repo",
+      "status": "error",
+      "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/ainativeide.git\" \"/tmp/hilbert-clone-1775353588246\" 2>&1"
+    },
+    "timestamp": 1775353588256
   }
 ]
