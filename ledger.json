@@ -35,5 +35,15 @@
       "status": "success"
     },
     "timestamp": 1775352883243
+  },
+  {
+    "hash": "1b652a499b08e29d67ad5f2169876ad2c07040c728c37935fb2eff687a776e15",
+    "intent": "Clone openclaw",
+    "operators": [],
+    "artifacts": {
+      "status": "no_op",
+      "message": "No matching operator for intent"
+    },
+    "timestamp": 1775352908071
   }
 ]
