@@ -232,5 +232,18 @@
       "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/pluribus.git\" \"/tmp/hilbert-clone-1775353627684\" 2>&1"
     },
     "timestamp": 1775353627698
+  },
+  {
+    "hash": "ce366e07d6e474a0ac2850c240bf33b6365dbdfea12503ee2cb8cac6a4fb8f9d",
+    "intent": "Clone pluribus",
+    "operators": [
+      "clone_repo"
+    ],
+    "artifacts": {
+      "operator": "clone_repo",
+      "status": "error",
+      "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/pluribus.git\" \"/tmp/hilbert-clone-1775353629104\" 2>&1"
+    },
+    "timestamp": 1775353629119
   }
 ]
