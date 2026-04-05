@@ -9,5 +9,18 @@
       "status": "test"
     },
     "timestamp": 1775352800872
+  },
+  {
+    "hash": "adcdd2bedd57b9d904934feee43f23146c1a701ba8a0a911ccda6551351a3009",
+    "intent": "write a shell script",
+    "operators": [
+      "write_file"
+    ],
+    "artifacts": {
+      "written_file": "deploy.sh",
+      "content_length": 22,
+      "status": "success"
+    },
+    "timestamp": 1775352826150
   }
 ]
