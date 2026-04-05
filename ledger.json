@@ -258,5 +258,18 @@
       "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/something.git\" \"/tmp/hilbert-clone-1775353639205\" 2>&1"
     },
     "timestamp": 1775353639216
+  },
+  {
+    "hash": "105a09e8c47ab53eacb2ffcee51c0ebe8f7f6c7dc56f2559e70c3b9802b9de22",
+    "intent": "Clone github",
+    "operators": [
+      "clone_repo"
+    ],
+    "artifacts": {
+      "operator": "clone_repo",
+      "status": "error",
+      "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/github.git\" \"/tmp/hilbert-clone-1775353652319\" 2>&1"
+    },
+    "timestamp": 1775353652330
   }
 ]
