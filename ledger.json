@@ -297,5 +297,18 @@
       "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/salagi.git\" \"/tmp/hilbert-clone-1775353672080\" 2>&1"
     },
     "timestamp": 1775353672096
+  },
+  {
+    "hash": "51a04e079a044391793213973c2c22d3258a89d430de9cab2d0a5cb55398034d",
+    "intent": "Clone aria",
+    "operators": [
+      "clone_repo"
+    ],
+    "artifacts": {
+      "operator": "clone_repo",
+      "status": "error",
+      "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/aria.git\" \"/tmp/hilbert-clone-1775353677842\" 2>&1"
+    },
+    "timestamp": 1775353677853
   }
 ]
