@@ -323,5 +323,20 @@
       "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/ariaagent.git\" \"/tmp/hilbert-clone-1775353682353\" 2>&1"
     },
     "timestamp": 1775353682373
+  },
+  {
+    "hash": "e8e1897673b07f7bb7c6259e56e83a1547e616cc39c0f7920930b03c750b8d7b",
+    "intent": "run rust code",
+    "operators": [
+      "run_rust"
+    ],
+    "artifacts": {
+      "language": "rust",
+      "code": "fn main() {\n    println!(\"Hello from Hilbert-IDE Rust runtime!\");\n    let v: Vec<u32> = (1..=5).map(|x| x * x).collect();\n    println!(\"Squares: {:?}\", v);\n}",
+      "compile_output": "(no warnings)",
+      "output": "Hello from Hilbert-IDE Rust runtime!\nSquares: [1, 4, 9, 16, 25]",
+      "status": "success"
+    },
+    "timestamp": 1775354010871
   }
 ]
