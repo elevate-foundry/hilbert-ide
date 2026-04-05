@@ -130,5 +130,16 @@
       "message": "No matching operator for intent"
     },
     "timestamp": 1775353284461
+  },
+  {
+    "hash": "e17addd3782793844ef2cde7a0c452ad34d02d6db18379b796a95c3c1e7a7260",
+    "intent": "{\"name\":f\"{you}\"}",
+    "operators": [],
+    "artifacts": {
+      "status": "no_op",
+      "message": "No matching operator for intent",
+      "hint": "Try intents like: 'clone openclaw', 'write a file', 'read the file', 'run a shell command'"
+    },
+    "timestamp": 1775353351985
   }
 ]
