@@ -56,5 +56,18 @@
       "status": "test"
     },
     "timestamp": 1775353007882
+  },
+  {
+    "hash": "8156c096e4c9c739287eaa0451bedad5ff8ed8e430dfb713ddb116af256dd05b",
+    "intent": "Clone openclaw",
+    "operators": [
+      "clone_repo"
+    ],
+    "artifacts": {
+      "operator": "clone_repo",
+      "status": "error",
+      "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/openclaw.git\" \"/tmp/hilbert-clone-1775353018451\" 2>&1"
+    },
+    "timestamp": 1775353018674
   }
 ]
