@@ -310,5 +310,18 @@
       "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/aria.git\" \"/tmp/hilbert-clone-1775353677842\" 2>&1"
     },
     "timestamp": 1775353677853
+  },
+  {
+    "hash": "b1634af12bd11b201f7624b264ccbafb05ec5cb82336e56e885d74c4cb008159",
+    "intent": "Clone aria-agent",
+    "operators": [
+      "clone_repo"
+    ],
+    "artifacts": {
+      "operator": "clone_repo",
+      "status": "error",
+      "error": "Command failed: git clone --depth 1 \"https://github.com/elevate-foundry/ariaagent.git\" \"/tmp/hilbert-clone-1775353682353\" 2>&1"
+    },
+    "timestamp": 1775353682373
   }
 ]
